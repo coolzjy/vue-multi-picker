@@ -105,9 +105,9 @@ export default {
       let isOutter = day.get('M') !== this.period.get('M')
       let isRestrict = this.restrict(day)
 
-      let isStart = this.selected.start.isSame(day, 'd')
-      let isEnd = this.selected.end.isSame(day, 'd')
-      let isContain = this.selected.contains(day)
+      let isStart = this.selected && this.selected.start.isSame(day, 'd')
+      let isEnd = this.selected && this.selected.end.isSame(day, 'd')
+      let isContain = this.selected && this.selected.contains(day)
 
       let isNextStart = this.nextRange && this.nextRange.start.isSame(day, 'd')
       let isNextEnd = this.nextRange && this.nextRange.end.isSame(day, 'd')
