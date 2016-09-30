@@ -9,7 +9,8 @@
     </tr>
     <tr v-for="week in weeks">
       <td>
-        <div :class="getClass(week.clone())"
+        <div class="calendar-item"
+          :class="getClass(week.clone())"
           @click="click(week.clone())">
           {{ getWeekInfo(week.clone()) }}
         </div>

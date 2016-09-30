@@ -203,7 +203,7 @@ var CalendarsDay = { template: "<div @mouseleave=leave><calendar-day v-for=\"p i
   components: { CalendarDay: CalendarDay }
 };
 
-var CalendarWeek = { template: "<table class=vmp-calendar-week><tr><th><div class=calendar-title>{{ period.get('y') }} 年 {{ period.get('M') + 1 }} 月</div><tr v-for=\"week in weeks\"><td><div :class=getClass(week.clone()) @click=click(week.clone())>{{ getWeekInfo(week.clone()) }}</div></table>",
+var CalendarWeek = { template: "<table class=vmp-calendar-week><tr><th><div class=calendar-title>{{ period.get('y') }} 年 {{ period.get('M') + 1 }} 月</div><tr v-for=\"week in weeks\"><td><div class=calendar-item :class=getClass(week.clone()) @click=click(week.clone())>{{ getWeekInfo(week.clone()) }}</div></table>",
   name: 'CalendarWeek',
 
   props: {
