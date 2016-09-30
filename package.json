@@ -13,7 +13,8 @@
   "license": "MIT",
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --inline --hot",
-    "build": "cross-env NODE_ENV=production rollup -c"
+    "build": "cross-env NODE_ENV=production rollup -c",
+    "preversion": "npm run build"
   },
   "peerDependencies": {
     "moment": ">=2.10.0",

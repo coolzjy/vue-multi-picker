@@ -83,9 +83,9 @@ var CalendarDay = { template: "<table class=vmp-calendar-day><tr><th colspan=7>{
       var isOutter = day.get('M') !== this.period.get('M');
       var isRestrict = this.restrict(day);
 
-      var isStart = this.selected.start.isSame(day, 'd');
-      var isEnd = this.selected.end.isSame(day, 'd');
-      var isContain = this.selected.contains(day);
+      var isStart = this.selected && this.selected.start.isSame(day, 'd');
+      var isEnd = this.selected && this.selected.end.isSame(day, 'd');
+      var isContain = this.selected && this.selected.contains(day);
 
       var isNextStart = this.nextRange && this.nextRange.start.isSame(day, 'd');
       var isNextEnd = this.nextRange && this.nextRange.end.isSame(day, 'd');
