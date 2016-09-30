@@ -22,7 +22,7 @@ export default {
       // preserves its current state and we are modifying
       // its initial state.
       type: 'day',
-      range: moment.range(moment().subtract(1, 'd'), moment())
+      range: null
     }
   },
 

@@ -29,13 +29,15 @@ export default {
     selectType: { type: String, default: 'day' },
     selected: { type: Object, twoWay: true },
     restrict: { type: Function },
+    resetOnTypeChange: { type: Boolean, default: true },
     // day
     calendarNum: { type: Number, default: 1 },
     length: { type: Number }
   },
 
-  data () {
-    return {
+  watch: {
+    'selectType' () {
+      if (this.resetOnTypeChange) this.selected = null
     }
   },
 

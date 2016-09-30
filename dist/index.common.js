@@ -10,7 +10,7 @@ function checkRange$1(range, inspector) {
   return result;
 }
 
-var CalendarDay = { template: "<table class=vmp-calendar-day><tr><th colspan=7>{{ period.get('y') }} 年 {{ period.get('M') + 1 }} 月<tr><th v-for=\"day in weekDays\">{{ day }}<tr v-for=\"week in calendarWeeks\"><td v-for=\"day in calendar.slice(week * 7, week * 7 + 7)\" :class=getClass(day.clone()) @click=click(day.clone()) @mouseenter=enter(day.clone())>{{ day.get('date') }}</table>",
+var CalendarDay = { template: "<table class=vmp-calendar-day><tr><th colspan=7><div class=calendar-title>{{ period.get('y') }} 年 {{ period.get('M') + 1 }} 月</div><tr><th v-for=\"day in weekDays\"><div class=calendar-weekdays>{{ day }}</div><tr v-for=\"week in calendarWeeks\"><td v-for=\"day in calendar.slice(week * 7, week * 7 + 7)\"><div class=calendar-item :class=getClass(day.clone()) @click=click(day.clone()) @mouseenter=enter(day.clone())>{{ day.get('date') }}</div></table>",
   name: 'CalendarDay',
 
   props: {
@@ -203,7 +203,9 @@ var CalendarsDay = { template: "<div @mouseleave=leave><calendar-day v-for=\"p i
   components: { CalendarDay: CalendarDay }
 };
 
-var CalendarWeek = { template: "<table class=vmp-calendar-week><tr><th>{{ period.get('y') }} 年 {{ period.get('M') + 1 }} 月<tr v-for=\"week in weeks\"><td :class=getClass(week.clone()) @click=click(week.clone())>{{ getWeekInfo(week.clone()) }}</table>",
+var CalendarWeek = { template: "<table class=vmp-calendar-week><tr><th><div class=calendar-title>{{ period.get('y') }} 年 {{ period.get('M') + 1 }} 月</div><tr v-for=\"week in weeks\"><td><div :class=getClass(week.clone()) @click=click(week.clone())>{{ getWeekInfo(week.clone()) }}</div></table>",
+  name: 'CalendarWeek',
+
   props: {
     restrict: {
       type: Function,
@@ -273,7 +275,9 @@ var CalendarWeek = { template: "<table class=vmp-calendar-week><tr><th>{{ period
   }
 };
 
-var CalendarMonth = { template: "<table class=vmp-calendar-month><tr><th colspan=4>{{ period.get('y') }} 年<tr v-for=\"_ in 3\"><td v-for=\"__ in 4\" :class=\"getClass(_ * 4 + __)\" @click=\"click(_ * 4 + __)\">{{ _ * 4 + __ + 1 }} 月</table>",
+var CalendarMonth = { template: "<table class=vmp-calendar-month><tr><th colspan=4><div class=calendar-title>{{ period.get('y') }} 年</div><tr v-for=\"_ in 3\"><td v-for=\"__ in 4\"><div class=calendar-item :class=\"getClass(_ * 4 + __)\" @click=\"click(_ * 4 + __)\">{{ _ * 4 + __ + 1 }} 月</div></table>",
+  name: 'CalendarMonth',
+
   props: {
     restrict: {
       type: Function,
@@ -336,15 +340,17 @@ var MultiPicker$1 = { template: "<div class=vmp-container><calendars-day v-if=\"
     selectType: { type: String, default: 'day' },
     selected: { type: Object, twoWay: true },
     restrict: { type: Function },
+    resetOnTypeChange: { type: Boolean, default: true },
     // day
     calendarNum: { type: Number, default: 1 },
     length: { type: Number }
   },
 
-  data: function data() {
-    return {};
+  watch: {
+    'selectType': function selectType() {
+      if (this.resetOnTypeChange) this.selected = null;
+    }
   },
-
 
   events: {
     prev: function prev() {

@@ -1,13 +1,19 @@
 <template>
   <table class="vmp-calendar-month">
     <tr>
-      <th colspan="4">{{ period.get('y') }} 年</th>
+      <th colspan="4">
+        <div class="calendar-title">
+          {{ period.get('y') }} 年
+        </div>
+      </th>
     </tr>
     <tr v-for="_ in 3">
-      <td v-for="__ in 4"
-        :class="getClass(_ * 4 + __)"
-        @click="click(_ * 4 + __)">
-        {{ _ * 4 + __ + 1 }} 月
+      <td v-for="__ in 4">
+        <div class="calendar-item"
+          :class="getClass(_ * 4 + __)"
+          @click="click(_ * 4 + __)">
+          {{ _ * 4 + __ + 1 }} 月
+        </div>
       </td>
     </tr>
   </table>
@@ -15,6 +21,8 @@
 
 <script>
 export default {
+  name: 'CalendarMonth',
+
   props: {
     restrict: {
       type: Function,

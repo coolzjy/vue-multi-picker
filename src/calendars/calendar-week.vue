@@ -1,10 +1,18 @@
 <template>
   <table class="vmp-calendar-week">
-    <tr><th>{{ period.get('y') }} 年 {{ period.get('M') + 1 }} 月</th></tr>
+    <tr>
+      <th>
+        <div class="calendar-title">
+          {{ period.get('y') }} 年 {{ period.get('M') + 1 }} 月
+        </div>
+      </th>
+    </tr>
     <tr v-for="week in weeks">
-      <td :class="getClass(week.clone())"
-        @click="click(week.clone())">
-        {{ getWeekInfo(week.clone()) }}
+      <td>
+        <div :class="getClass(week.clone())"
+          @click="click(week.clone())">
+          {{ getWeekInfo(week.clone()) }}
+        </div>
       </td>
     </tr>
   </table>
@@ -12,6 +20,8 @@
 
 <script>
 export default {
+  name: 'CalendarWeek',
+
   props: {
     restrict: {
       type: Function,

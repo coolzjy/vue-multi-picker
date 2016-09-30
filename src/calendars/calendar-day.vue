@@ -1,17 +1,27 @@
 <template>
   <table class="vmp-calendar-day">
     <tr>
-      <th colspan="7">{{ period.get('y') }} 年 {{ period.get('M') + 1 }} 月</th>
+      <th colspan="7">
+        <div class="calendar-title">
+          {{ period.get('y') }} 年 {{ period.get('M') + 1 }} 月
+        </div>
+      </th>
     </tr>
     <tr>
-      <th v-for="day in weekDays">{{ day }}</th>
+      <th v-for="day in weekDays">
+        <div class="calendar-weekdays">
+          {{ day }}
+        </div>
+      </th>
     </tr>
     <tr v-for="week in calendarWeeks">
-      <td v-for="day in calendar.slice(week * 7, week * 7 + 7)"
-        :class="getClass(day.clone())"
-        @click="click(day.clone())"
-        @mouseenter="enter(day.clone())">
-        {{ day.get('date') }}
+      <td v-for="day in calendar.slice(week * 7, week * 7 + 7)">
+        <div class="calendar-item"
+          :class="getClass(day.clone())"
+          @click="click(day.clone())"
+          @mouseenter="enter(day.clone())">
+          {{ day.get('date') }}
+        </div>
       </td>
     </tr>
   </table>
