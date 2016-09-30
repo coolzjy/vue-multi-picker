@@ -16,9 +16,9 @@
     "build": "cross-env NODE_ENV=production rollup -c"
   },
   "peerDependencies": {
-    "moment": "^2.15.1",
-    "moment-range": "^2.2.0",
-    "vue": "^1.0.0"
+    "moment": ">=2.10.0",
+    "moment-range": ">=2.0.0",
+    "vue": ">=1.0.0"
   },
   "devDependencies": {
     "babel-core": "^6.0.0",
