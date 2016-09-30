@@ -38,7 +38,7 @@ export default {
 
   data () {
     return {
-      period: Object.freeze(moment({ M: 0, d: 1 }))
+      period: moment({ M: 0, d: 1 })
     }
   },
 
@@ -74,10 +74,10 @@ export default {
 
   events: {
     prev () {
-      this.period = Object.freeze(this.period.clone().subtract(1, 'y'))
+      this.period = this.period.clone().subtract(1, 'y')
     },
     next () {
-      this.period = Object.freeze(this.period.clone().add(1, 'y'))
+      this.period = this.period.clone().add(1, 'y')
     }
   }
 }

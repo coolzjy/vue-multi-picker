@@ -166,7 +166,7 @@ var CalendarsDay = { template: "<div @mouseleave=leave><calendar-day v-for=\"p i
 
   data: function data() {
     return {
-      period: Object.freeze(moment({ d: 1 })),
+      period: moment({ d: 1 }),
       nextStart: null,
       nextEnd: null
     };
@@ -193,10 +193,10 @@ var CalendarsDay = { template: "<div @mouseleave=leave><calendar-day v-for=\"p i
 
   events: {
     prev: function prev() {
-      this.period = Object.freeze(this.period.clone().subtract(1, 'M'));
+      this.period = this.period.clone().subtract(1, 'M');
     },
     next: function next() {
-      this.period = Object.freeze(this.period.clone().add(1, 'M'));
+      this.period = this.period.clone().add(1, 'M');
     }
   },
 
@@ -221,7 +221,7 @@ var CalendarWeek = { template: "<table class=vmp-calendar-week><tr><th><div clas
 
   data: function data() {
     return {
-      period: Object.freeze(moment({ d: 1 }))
+      period: moment({ d: 1 })
     };
   },
 
@@ -267,10 +267,10 @@ var CalendarWeek = { template: "<table class=vmp-calendar-week><tr><th><div clas
 
   events: {
     prev: function prev() {
-      this.period = Object.freeze(this.period.clone().subtract(1, 'M'));
+      this.period = this.period.clone().subtract(1, 'M');
     },
     next: function next() {
-      this.period = Object.freeze(this.period.clone().add(1, 'M'));
+      this.period = this.period.clone().add(1, 'M');
     }
   }
 };
@@ -293,7 +293,7 @@ var CalendarMonth = { template: "<table class=vmp-calendar-month><tr><th colspan
 
   data: function data() {
     return {
-      period: Object.freeze(moment({ M: 0, d: 1 }))
+      period: moment({ M: 0, d: 1 })
     };
   },
 
@@ -326,10 +326,10 @@ var CalendarMonth = { template: "<table class=vmp-calendar-month><tr><th colspan
 
   events: {
     prev: function prev() {
-      this.period = Object.freeze(this.period.clone().subtract(1, 'y'));
+      this.period = this.period.clone().subtract(1, 'y');
     },
     next: function next() {
-      this.period = Object.freeze(this.period.clone().add(1, 'y'));
+      this.period = this.period.clone().add(1, 'y');
     }
   }
 };
