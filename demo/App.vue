@@ -6,6 +6,7 @@
     <input type="radio" name="type" value="week" v-model="type">
     <input type="radio" name="type" value="month" v-model="type">
     <multi-picker :select-type="type"
+      :restrict="restrict"
       :selected.sync="range">
     </multi-picker>
   </div>
@@ -21,14 +22,14 @@ export default {
       // with hot-reload because the reloaded component
       // preserves its current state and we are modifying
       // its initial state.
-      type: 'day',
+      type: null,
       range: null
     }
   },
 
   methods: {
-    restrict (day) {
-      return day.isAfter(moment().subtract(1, 'd'), 'd')
+    restrict (range) {
+      return range.start.isAfter(moment())
     }
   },
 
@@ -63,5 +64,9 @@ body {
 .next-end {
   border-top-right-radius: 50%;
   border-bottom-right-radius: 50%;
+}
+
+.restrict {
+  color: #ccc;
 }
 </style>

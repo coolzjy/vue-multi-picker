@@ -16,7 +16,8 @@ import { CalendarDay, CalendarWeek, CalendarMonth } from 'vue-multi-picker'
   :length="7 (only work under range select mode)"
   :calendar-num="2 (only work under day and range select mode)"
   :selected.sync="selected (moment range object)"
-  :restrict="resFunc (a moment object given as arg, return true to restrict)"
+  :restrict="resFunc (a momentrange object given as arg,
+    return true to restrict selection)"
   :reset-on-type-change="true (reset selected to null, default enabled)">
 </multi-picker>
 ```

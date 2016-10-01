@@ -2,14 +2,6 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-function checkRange$1(range, inspector) {
-  var result = true;
-  range.by('d', function (moment) {
-    result = result && !inspector(moment);
-  });
-  return result;
-}
-
 var CalendarDay = { template: "<table class=vmp-calendar-day><tr><th colspan=7><div class=calendar-title>{{ period.get('y') }} 年 {{ period.get('M') + 1 }} 月</div><tr><th v-for=\"day in weekDays\"><div class=calendar-weekdays>{{ day }}</div><tr v-for=\"week in calendarWeeks\"><td v-for=\"day in calendar.slice(week * 7, week * 7 + 7)\"><div class=calendar-item :class=getClass(day.clone()) @click=click(day.clone()) @mouseenter=enter(day.clone())>{{ day.get('date') }}</div></table>",
   name: 'CalendarDay',
 
@@ -26,8 +18,8 @@ var CalendarDay = { template: "<table class=vmp-calendar-day><tr><th colspan=7><
     },
     restrict: {
       type: Function,
-      default: function _default(day) {
-        return day.isAfter(moment());
+      default: function _default() {
+        return false;
       }
     },
     selected: {
@@ -81,7 +73,7 @@ var CalendarDay = { template: "<table class=vmp-calendar-day><tr><th colspan=7><
   methods: {
     getClass: function getClass(day) {
       var isOutter = day.get('M') !== this.period.get('M');
-      var isRestrict = this.restrict(day);
+      var isRestrict = this.restrict(moment.range(day.clone().startOf('d'), day.clone().endOf('d')));
 
       var isStart = this.selected && this.selected.start.isSame(day, 'd');
       var isEnd = this.selected && this.selected.end.isSame(day, 'd');
@@ -107,13 +99,10 @@ var CalendarDay = { template: "<table class=vmp-calendar-day><tr><th colspan=7><
           this.selected = moment.range(this.nextStart, this.nextEnd);
           this.nextStart = this.nextEnd = null;
         }
-      } else if (!this.nextEnd) {
-        if (checkRange$1(moment.range(day, day), this.restrict)) {
-          this.nextEnd = day;
-        }
-      } else {
-        var range = this.nextStart.isBefore(day) ? moment.range(this.nextStart, day) : moment.range(day, this.nextStart);
-        if (checkRange$1(range, this.restrict)) {
+      } else if (this.nextStart && !this.nextEnd) {
+        this.nextEnd = day.clone().endOf('d');
+      } else if (this.nextStart && this.nextEnd) {
+        if (!this.restrict(this.nextRange)) {
           this.selected = this.nextRange.clone();
           this.nextStart = this.nextEnd = null;
         }
@@ -122,22 +111,21 @@ var CalendarDay = { template: "<table class=vmp-calendar-day><tr><th colspan=7><
     enter: function enter(day) {
       if (this.selectType === 'day' || this.length > 0) {
         // single and fixed
-        var range = moment.range(day, day.clone().add(this.realLength, 'd'));
-        if (checkRange$1(range, this.restrict)) {
-          this.nextStart = day.clone();
-          this.nextEnd = day.clone().add(this.realLength, 'd');
+        var range = moment.range(day, day.clone().add(this.realLength, 'd').endOf('d'));
+        if (!this.restrict(range)) {
+          this.nextStart = range.start;
+          this.nextEnd = range.end;
         } else {
           this.nextStart = this.nextEnd = null;
         }
       } else if (!this.nextEnd) {
         // range start
-        if (checkRange$1(moment.range(day, day), this.restrict)) {
+        if (!this.restrict(moment.range(day, day.clone().endOf('d')))) {
           this.nextStart = day;
         }
       } else {
-        var _range = this.nextStart.isBefore(day) ? moment.range(this.nextStart, day) : moment.range(day, this.nextStart);
-        if (checkRange$1(_range, this.restrict)) {
-          this.nextEnd = day;
+        if (!this.restrict(this.nextRange)) {
+          this.nextEnd = day.clone().endOf('d');
         }
       }
     }
@@ -209,8 +197,8 @@ var CalendarWeek = { template: "<table class=vmp-calendar-week><tr><th><div clas
   props: {
     restrict: {
       type: Function,
-      default: function _default(start, end) {
-        return end.isAfter(moment());
+      default: function _default() {
+        return false;
       }
     },
     selected: {
@@ -228,10 +216,11 @@ var CalendarWeek = { template: "<table class=vmp-calendar-week><tr><th><div clas
 
   computed: {
     weeks: function weeks() {
-      var endWeek = this.period.clone().endOf('M');
+      var end = this.period.clone().endOf('M').startOf('w');
       var weeks = [];
-      for (var week = this.period.clone().startOf('M'); week.isBefore(endWeek); week.add(1, 'w')) {
-        weeks.push(week.clone());
+      for (var weekStart = this.period.clone().startOf('M').startOf('w'); !weekStart.isAfter(end); weekStart.add(1, 'w')) {
+        var weekEnd = weekStart.clone().endOf('w');
+        weeks.push(moment.range(weekStart, weekEnd));
       }
       return weeks;
     }
@@ -239,29 +228,22 @@ var CalendarWeek = { template: "<table class=vmp-calendar-week><tr><th><div clas
 
   methods: {
     getClass: function getClass(week) {
-      var isSelected = this.selected && this.selected.start.isSame(week.startOf('w'), 'd') && this.selected.end.isSame(week.endOf('w'), 'd');
-      var isRestrict = this.checkRange(week);
+      var isSelected = this.selected && this.selected.start.isSame(week.start, 'd') && this.selected.end.isSame(week.end, 'd');
+      var isRestrict = this.restrict(week);
       return {
         'selected': isSelected,
         'restrict': isRestrict
       };
     },
     getWeekInfo: function getWeekInfo(week) {
-      var startDate = week.startOf('w').format('MMDD');
-      var endDate = week.endOf('w').format('MMDD');
-      return '\u7B2C ' + week.weeks() + ' \u5468 (' + startDate + ' - ' + endDate + ')';
+      var startStr = week.start.format('MMDD');
+      var endStr = week.end.format('MMDD');
+      return '\u7B2C ' + week.start.weeks() + ' \u5468 (' + startStr + ' - ' + endStr + ')';
     },
     click: function click(week) {
-      var startMoment = week.clone().startOf('w');
-      var endMoment = week.clone().endOf('w');
-      if (!this.restrict(startMoment, endMoment)) {
-        this.selected = moment.range(startMoment, endMoment);
+      if (!this.restrict(week)) {
+        this.selected = week;
       }
-    },
-    checkRange: function checkRange(week) {
-      var startMoment = week.clone().startOf('w');
-      var endMoment = week.clone().endOf('w');
-      return this.restrict(startMoment, endMoment);
     }
   },
 
@@ -281,8 +263,8 @@ var CalendarMonth = { template: "<table class=vmp-calendar-month><tr><th colspan
   props: {
     restrict: {
       type: Function,
-      default: function _default(start, end) {
-        return end.isAfter(moment());
+      default: function _default() {
+        return false;
       }
     },
     selected: {
@@ -302,7 +284,7 @@ var CalendarMonth = { template: "<table class=vmp-calendar-month><tr><th colspan
     getClass: function getClass(month) {
       var monthMoment = moment({ y: this.period.year(), M: month });
       var isSelected = this.selected && this.selected.start.isSame(monthMoment.startOf('M'), 'd') && this.selected.end.isSame(monthMoment.endOf('M'), 'd');
-      var isRestrict = this.checkRange(month);
+      var isRestrict = this.checkRestrict(month);
       return {
         'selected': isSelected,
         'restrict': isRestrict
@@ -312,15 +294,15 @@ var CalendarMonth = { template: "<table class=vmp-calendar-month><tr><th colspan
       var monthMoment = this.period.clone().month(month);
       var startMoment = monthMoment.clone().startOf('M');
       var endMoment = monthMoment.clone().endOf('M');
-      if (!this.restrict(startMoment, endMoment)) {
+      if (!this.checkRestrict(month)) {
         this.selected = moment.range(startMoment, endMoment);
       }
     },
-    checkRange: function checkRange(month) {
+    checkRestrict: function checkRestrict(month) {
       var monthMoment = this.period.clone().month(month);
       var startMoment = monthMoment.clone().startOf('M');
       var endMoment = monthMoment.clone().endOf('M');
-      return this.restrict(startMoment, endMoment);
+      return this.restrict(moment.range(startMoment, endMoment));
     }
   },
 

@@ -26,9 +26,7 @@ export default {
   props: {
     restrict: {
       type: Function,
-      default (start, end) {
-        return end.isAfter(moment())
-      }
+      default () { return false }
     },
     selected: {
       type: Object,
@@ -48,7 +46,7 @@ export default {
       let isSelected = this.selected &&
         this.selected.start.isSame(monthMoment.startOf('M'), 'd') &&
         this.selected.end.isSame(monthMoment.endOf('M'), 'd')
-      let isRestrict = this.checkRange(month)
+      let isRestrict = this.checkRestrict(month)
       return {
         'selected': isSelected,
         'restrict': isRestrict
@@ -59,16 +57,16 @@ export default {
       let monthMoment = this.period.clone().month(month)
       let startMoment = monthMoment.clone().startOf('M')
       let endMoment = monthMoment.clone().endOf('M')
-      if (!this.restrict(startMoment, endMoment)) {
+      if (!this.checkRestrict(month)) {
         this.selected = moment.range(startMoment, endMoment)
       }
     },
 
-    checkRange (month) {
+    checkRestrict (month) {
       let monthMoment = this.period.clone().month(month)
       let startMoment = monthMoment.clone().startOf('M')
       let endMoment = monthMoment.clone().endOf('M')
-      return this.restrict(startMoment, endMoment)
+      return this.restrict(moment.range(startMoment, endMoment))
     }
   },
 

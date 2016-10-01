@@ -28,14 +28,6 @@
 </template>
 
 <script>
-function checkRange (range, inspector) {
-  let result = true
-  range.by('d', moment => {
-    result = result && !inspector(moment)
-  })
-  return result
-}
-
 export default {
   name: 'CalendarDay',
 
@@ -52,9 +44,7 @@ export default {
     },
     restrict: {
       type: Function,
-      default (day) {
-        return day.isAfter(moment())
-      }
+      default () { return false }
     },
     selected: {
       type: Object,
@@ -113,7 +103,8 @@ export default {
   methods: {
     getClass (day) {
       let isOutter = day.get('M') !== this.period.get('M')
-      let isRestrict = this.restrict(day)
+      let isRestrict = this.restrict(moment.range(day.clone().startOf('d'),
+        day.clone().endOf('d')))
 
       let isStart = this.selected && this.selected.start.isSame(day, 'd')
       let isEnd = this.selected && this.selected.end.isSame(day, 'd')
@@ -141,15 +132,10 @@ export default {
           this.selected = moment.range(this.nextStart, this.nextEnd)
           this.nextStart = this.nextEnd = null
         }
-      } else if (!this.nextEnd) {
-        if (checkRange(moment.range(day, day), this.restrict)) {
-          this.nextEnd = day
-        }
-      } else {
-        let range = this.nextStart.isBefore(day)
-          ? moment.range(this.nextStart, day)
-          : moment.range(day, this.nextStart)
-        if (checkRange(range, this.restrict)) {
+      } else if (this.nextStart && !this.nextEnd) {
+        this.nextEnd = day.clone().endOf('d')
+      } else if (this.nextStart && this.nextEnd) {
+        if (!this.restrict(this.nextRange)) {
           this.selected = this.nextRange.clone()
           this.nextStart = this.nextEnd = null
         }
@@ -159,24 +145,22 @@ export default {
     enter (day) {
       if (this.selectType === 'day' || this.length > 0) {
         // single and fixed
-        let range = moment.range(day, day.clone().add(this.realLength, 'd'))
-        if (checkRange(range, this.restrict)) {
-          this.nextStart = day.clone()
-          this.nextEnd = day.clone().add(this.realLength, 'd')
+        let range =
+          moment.range(day, day.clone().add(this.realLength, 'd').endOf('d'))
+        if (!this.restrict(range)) {
+          this.nextStart = range.start
+          this.nextEnd = range.end
         } else {
           this.nextStart = this.nextEnd = null
         }
       } else if (!this.nextEnd) {
         // range start
-        if (checkRange(moment.range(day, day), this.restrict)) {
+        if (!this.restrict(moment.range(day, day.clone().endOf('d')))) {
           this.nextStart = day
         }
       } else {
-        let range = this.nextStart.isBefore(day)
-          ? moment.range(this.nextStart, day)
-          : moment.range(day, this.nextStart)
-        if (checkRange(range, this.restrict)) {
-          this.nextEnd = day
+        if (!this.restrict(this.nextRange)) {
+          this.nextEnd = day.clone().endOf('d')
         }
       }
     }

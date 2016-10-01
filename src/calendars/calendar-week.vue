@@ -26,9 +26,7 @@ export default {
   props: {
     restrict: {
       type: Function,
-      default (start, end) {
-        return end.isAfter(moment())
-      }
+      default () { return false }
     },
     selected: {
       type: Object,
@@ -44,11 +42,12 @@ export default {
 
   computed: {
     weeks () {
-      let endWeek = this.period.clone().endOf('M')
+      let end = this.period.clone().endOf('M').startOf('w')
       let weeks = []
-      for (let week = this.period.clone().startOf('M');
-        week.isBefore(endWeek); week.add(1, 'w')) {
-        weeks.push(week.clone())
+      for (let weekStart = this.period.clone().startOf('M').startOf('w');
+        !weekStart.isAfter(end); weekStart.add(1, 'w')) {
+          let weekEnd = weekStart.clone().endOf('w')
+          weeks.push(moment.range(weekStart, weekEnd))
       }
       return weeks
     }
@@ -57,9 +56,9 @@ export default {
   methods: {
     getClass (week) {
       let isSelected = this.selected &&
-        this.selected.start.isSame(week.startOf('w'), 'd') &&
-        this.selected.end.isSame(week.endOf('w'), 'd')
-      let isRestrict = this.checkRange(week)
+        this.selected.start.isSame(week.start, 'd') &&
+        this.selected.end.isSame(week.end, 'd')
+      let isRestrict = this.restrict(week)
       return {
         'selected': isSelected,
         'restrict': isRestrict
@@ -67,23 +66,15 @@ export default {
     },
 
     getWeekInfo (week) {
-      let startDate = week.startOf('w').format('MMDD')
-      let endDate = week.endOf('w').format('MMDD')
-      return `第 ${week.weeks()} 周 (${startDate} - ${endDate})`
+      let startStr = week.start.format('MMDD')
+      let endStr = week.end.format('MMDD')
+      return `第 ${week.start.weeks()} 周 (${startStr} - ${endStr})`
     },
 
     click (week) {
-      let startMoment = week.clone().startOf('w')
-      let endMoment = week.clone().endOf('w')
-      if (!this.restrict(startMoment, endMoment)) {
-        this.selected = moment.range(startMoment, endMoment)
+      if (!this.restrict(week)) {
+        this.selected = week
       }
-    },
-
-    checkRange(week) {
-      let startMoment = week.clone().startOf('w')
-      let endMoment = week.clone().endOf('w')
-      return this.restrict(startMoment, endMoment)
     }
   },
 
