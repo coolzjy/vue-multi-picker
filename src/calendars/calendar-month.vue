@@ -35,10 +35,18 @@ export default {
   },
 
   data () {
-    let period = this.selected
-      ? this.selected.end.clone().startOf('y')
-      : moment({ M: 0, d: 1 })
-    return { period }
+    return { period: moment({ M: 0, d: 1 }) }
+  },
+
+  watch: {
+    'selected': {
+      immediate: true,
+      handler (value) {
+        if (value) {
+          this.period = value.end.clone().startOf('y')
+        }
+      }
+    }
   },
 
   methods: {

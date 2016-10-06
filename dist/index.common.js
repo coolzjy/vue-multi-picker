@@ -157,9 +157,8 @@ var CalendarsDay = { template: "<div @mouseleave=leave><calendar-day v-for=\"p i
   },
 
   data: function data() {
-    var period = this.selected ? this.selected.end.clone().startOf('M') : moment({ d: 1 });
     return {
-      period: period,
+      period: moment({ d: 1 }),
       nextStart: null,
       nextEnd: null
     };
@@ -173,6 +172,17 @@ var CalendarsDay = { template: "<div @mouseleave=leave><calendar-day v-for=\"p i
         periods.unshift(this.period.clone().subtract(i, 'M'));
       }
       return periods;
+    }
+  },
+
+  watch: {
+    'selected': {
+      immediate: true,
+      handler: function handler(value) {
+        if (value) {
+          this.period = value.end.clone().startOf('M');
+        }
+      }
     }
   },
 
@@ -213,8 +223,7 @@ var CalendarWeek = { template: "<table class=vmp-calendar-week><tr><th><div clas
   },
 
   data: function data() {
-    var period = this.selected ? this.selected.end.clone().startOf('M') : moment({ d: 1 });
-    return { period: period };
+    return { period: moment({ d: 1 }) };
   },
 
 
@@ -227,6 +236,17 @@ var CalendarWeek = { template: "<table class=vmp-calendar-week><tr><th><div clas
         weeks.push(moment.range(weekStart, weekEnd));
       }
       return weeks;
+    }
+  },
+
+  watch: {
+    'selected': {
+      immediate: true,
+      handler: function handler(value) {
+        if (value) {
+          this.period = value.end.clone().startOf('M');
+        }
+      }
     }
   },
 
@@ -278,10 +298,20 @@ var CalendarMonth = { template: "<table class=vmp-calendar-month><tr><th colspan
   },
 
   data: function data() {
-    var period = this.selected ? this.selected.end.clone().startOf('y') : moment({ M: 0, d: 1 });
-    return { period: period };
+    return { period: moment({ M: 0, d: 1 }) };
   },
 
+
+  watch: {
+    'selected': {
+      immediate: true,
+      handler: function handler(value) {
+        if (value) {
+          this.period = value.end.clone().startOf('y');
+        }
+      }
+    }
+  },
 
   methods: {
     getClass: function getClass(month) {

@@ -35,10 +35,7 @@ export default {
   },
 
   data () {
-    let period = this.selected
-      ? this.selected.end.clone().startOf('M')
-      : moment({ d: 1 })
-    return { period }
+    return { period: moment({ d: 1 }) }
   },
 
   computed: {
@@ -51,6 +48,17 @@ export default {
           weeks.push(moment.range(weekStart, weekEnd))
       }
       return weeks
+    }
+  },
+
+  watch: {
+    'selected': {
+      immediate: true,
+      handler (value) {
+        if (value) {
+          this.period = value.end.clone().startOf('M')
+        }
+      }
     }
   },
 
