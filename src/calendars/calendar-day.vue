@@ -157,10 +157,14 @@ export default {
         // range start
         if (!this.restrict(moment.range(day, day.clone().endOf('d')))) {
           this.nextStart = day
+        } else {
+          this.nextStart = null
         }
-      } else {
-        if (!this.restrict(this.nextRange)) {
-          this.nextEnd = day.clone().endOf('d')
+      } else if (this.nextStart) {
+        let prevNextEnd = this.nextEnd
+        this.nextEnd = day.clone().endOf('d')
+        if (this.restrict(this.nextRange)) {
+          this.nextEnd = prevNextEnd
         }
       }
     }

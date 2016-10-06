@@ -122,10 +122,14 @@ var CalendarDay = { template: "<table class=vmp-calendar-day><tr><th colspan=7><
         // range start
         if (!this.restrict(moment.range(day, day.clone().endOf('d')))) {
           this.nextStart = day;
+        } else {
+          this.nextStart = null;
         }
-      } else {
-        if (!this.restrict(this.nextRange)) {
-          this.nextEnd = day.clone().endOf('d');
+      } else if (this.nextStart) {
+        var prevNextEnd = this.nextEnd;
+        this.nextEnd = day.clone().endOf('d');
+        if (this.restrict(this.nextRange)) {
+          this.nextEnd = prevNextEnd;
         }
       }
     }
@@ -153,8 +157,9 @@ var CalendarsDay = { template: "<div @mouseleave=leave><calendar-day v-for=\"p i
   },
 
   data: function data() {
+    var period = this.selected ? this.selected.end.clone().startOf('M') : moment({ d: 1 });
     return {
-      period: moment({ d: 1 }),
+      period: period,
       nextStart: null,
       nextEnd: null
     };
@@ -208,9 +213,8 @@ var CalendarWeek = { template: "<table class=vmp-calendar-week><tr><th><div clas
   },
 
   data: function data() {
-    return {
-      period: moment({ d: 1 })
-    };
+    var period = this.selected ? this.selected.end.clone().startOf('M') : moment({ d: 1 });
+    return { period: period };
   },
 
 
@@ -274,9 +278,8 @@ var CalendarMonth = { template: "<table class=vmp-calendar-month><tr><th colspan
   },
 
   data: function data() {
-    return {
-      period: moment({ M: 0, d: 1 })
-    };
+    var period = this.selected ? this.selected.end.clone().startOf('y') : moment({ M: 0, d: 1 });
+    return { period: period };
   },
 
 

@@ -36,8 +36,11 @@ export default {
   },
 
   data () {
+    let period = this.selected
+      ? this.selected.end.clone().startOf('M')
+      : moment({ d: 1 })
     return {
-      period: moment({ d: 1 }),
+      period,
       nextStart: null,
       nextEnd: null
     }
