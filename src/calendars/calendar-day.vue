@@ -20,7 +20,7 @@
           :class="getClass(day.clone())"
           @click="click(day.clone())"
           @mouseenter="enter(day.clone())">
-          {{ day.get('date') }}
+          {{ current.isSame(day, 'd') ? '今天' : day.get('date') }}
         </div>
       </td>
     </tr>
@@ -28,6 +28,8 @@
 </template>
 
 <script>
+const TODAY = moment().startOf('d')
+
 export default {
   name: 'CalendarDay',
 
@@ -62,6 +64,7 @@ export default {
 
   data () {
     this.weekDays = moment.weekdaysShort(true)
+    this.current = TODAY
     return {}
   },
 
@@ -102,6 +105,8 @@ export default {
 
   methods: {
     getClass (day) {
+      let isCurrent = day.isSame(TODAY, 'd')
+
       let isOutter = day.get('M') !== this.period.get('M')
       let isRestrict = this.restrict(moment.range(day.clone().startOf('d'),
         day.clone().endOf('d')))
@@ -115,6 +120,7 @@ export default {
       let isNextContain = this.nextRange &&
         day.isBetween(this.nextRange.start, this.nextRange.end)
       return {
+        'current': isCurrent,
         'outter': isOutter,
         'restrict': isRestrict,
         'selected-start': isStart,

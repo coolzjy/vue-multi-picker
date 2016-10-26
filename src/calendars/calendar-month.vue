@@ -20,6 +20,8 @@
 </template>
 
 <script>
+const THIS_MONTH = moment().startOf('M')
+
 export default {
   name: 'CalendarMonth',
 
@@ -52,11 +54,13 @@ export default {
   methods: {
     getClass (month) {
       let monthMoment = moment({ y: this.period.year(), M: month })
+      let isCurrent = monthMoment.isSame(THIS_MONTH, 'M')
       let isSelected = this.selected &&
         this.selected.start.isSame(monthMoment.startOf('M'), 'd') &&
         this.selected.end.isSame(monthMoment.endOf('M'), 'd')
       let isRestrict = this.checkRestrict(month)
       return {
+        'current': isCurrent,
         'selected': isSelected,
         'restrict': isRestrict
       }

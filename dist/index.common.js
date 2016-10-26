@@ -2,7 +2,9 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var CalendarDay = { template: "<table class=vmp-calendar-day><tr><th colspan=7><div class=calendar-title>{{ period.get('y') }} 年 {{ period.get('M') + 1 }} 月</div><tr><th v-for=\"day in weekDays\"><div class=calendar-weekdays>{{ day }}</div><tr v-for=\"week in calendarWeeks\"><td v-for=\"day in calendar.slice(week * 7, week * 7 + 7)\"><div class=calendar-item :class=getClass(day.clone()) @click=click(day.clone()) @mouseenter=enter(day.clone())>{{ day.get('date') }}</div></table>",
+var TODAY = moment().startOf('d');
+
+var CalendarDay = { template: "<table class=vmp-calendar-day><tr><th colspan=7><div class=calendar-title>{{ period.get('y') }} 年 {{ period.get('M') + 1 }} 月</div><tr><th v-for=\"day in weekDays\"><div class=calendar-weekdays>{{ day }}</div><tr v-for=\"week in calendarWeeks\"><td v-for=\"day in calendar.slice(week * 7, week * 7 + 7)\"><div class=calendar-item :class=getClass(day.clone()) @click=click(day.clone()) @mouseenter=enter(day.clone())>{{ current.isSame(day, 'd') ? '今天' : day.get('date') }}</div></table>",
   name: 'CalendarDay',
 
   props: {
@@ -38,6 +40,7 @@ var CalendarDay = { template: "<table class=vmp-calendar-day><tr><th colspan=7><
 
   data: function data() {
     this.weekDays = moment.weekdaysShort(true);
+    this.current = TODAY;
     return {};
   },
 
@@ -72,6 +75,8 @@ var CalendarDay = { template: "<table class=vmp-calendar-day><tr><th colspan=7><
 
   methods: {
     getClass: function getClass(day) {
+      var isCurrent = day.isSame(TODAY, 'd');
+
       var isOutter = day.get('M') !== this.period.get('M');
       var isRestrict = this.restrict(moment.range(day.clone().startOf('d'), day.clone().endOf('d')));
 
@@ -83,6 +88,7 @@ var CalendarDay = { template: "<table class=vmp-calendar-day><tr><th colspan=7><
       var isNextEnd = this.nextRange && this.nextRange.end.isSame(day, 'd');
       var isNextContain = this.nextRange && day.isBetween(this.nextRange.start, this.nextRange.end);
       return {
+        'current': isCurrent,
         'outter': isOutter,
         'restrict': isRestrict,
         'selected-start': isStart,
@@ -206,6 +212,8 @@ var CalendarsDay = { template: "<div @mouseleave=leave><calendar-day v-for=\"p i
   components: { CalendarDay: CalendarDay }
 };
 
+var THIS_WEEK = moment().startOf('w');
+
 var CalendarWeek = { template: "<table class=vmp-calendar-week><tr><th><div class=calendar-title>{{ period.get('y') }} 年 {{ period.get('M') + 1 }} 月</div><tr v-for=\"week in weeks\"><td><div class=calendar-item :class=getClass(week.clone()) @click=click(week.clone())>{{ getWeekInfo(week.clone()) }}</div></table>",
   name: 'CalendarWeek',
 
@@ -252,9 +260,11 @@ var CalendarWeek = { template: "<table class=vmp-calendar-week><tr><th><div clas
 
   methods: {
     getClass: function getClass(week) {
+      var isCurrent = week.start.isSame(THIS_WEEK, 'w');
       var isSelected = this.selected && this.selected.start.isSame(week.start, 'd') && this.selected.end.isSame(week.end, 'd');
       var isRestrict = this.restrict(week);
       return {
+        'current': isCurrent,
         'selected': isSelected,
         'restrict': isRestrict
       };
@@ -280,6 +290,8 @@ var CalendarWeek = { template: "<table class=vmp-calendar-week><tr><th><div clas
     }
   }
 };
+
+var THIS_MONTH = moment().startOf('M');
 
 var CalendarMonth = { template: "<table class=vmp-calendar-month><tr><th colspan=4><div class=calendar-title>{{ period.get('y') }} 年</div><tr v-for=\"_ in 3\"><td v-for=\"__ in 4\"><div class=calendar-item :class=\"getClass(_ * 4 + __)\" @click=\"click(_ * 4 + __)\">{{ _ * 4 + __ + 1 }} 月</div></table>",
   name: 'CalendarMonth',
@@ -316,9 +328,11 @@ var CalendarMonth = { template: "<table class=vmp-calendar-month><tr><th colspan
   methods: {
     getClass: function getClass(month) {
       var monthMoment = moment({ y: this.period.year(), M: month });
+      var isCurrent = monthMoment.isSame(THIS_MONTH, 'M');
       var isSelected = this.selected && this.selected.start.isSame(monthMoment.startOf('M'), 'd') && this.selected.end.isSame(monthMoment.endOf('M'), 'd');
       var isRestrict = this.checkRestrict(month);
       return {
+        'current': isCurrent,
         'selected': isSelected,
         'restrict': isRestrict
       };

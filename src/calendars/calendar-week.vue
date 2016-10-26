@@ -20,6 +20,8 @@
 </template>
 
 <script>
+const THIS_WEEK = moment().startOf('w')
+
 export default {
   name: 'CalendarWeek',
 
@@ -64,11 +66,13 @@ export default {
 
   methods: {
     getClass (week) {
+      let isCurrent = week.start.isSame(THIS_WEEK, 'w')
       let isSelected = this.selected &&
         this.selected.start.isSame(week.start, 'd') &&
         this.selected.end.isSame(week.end, 'd')
       let isRestrict = this.restrict(week)
       return {
+        'current': isCurrent,
         'selected': isSelected,
         'restrict': isRestrict
       }
