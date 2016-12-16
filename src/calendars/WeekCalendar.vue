@@ -6,14 +6,18 @@
       </th>
     </tr>
     <tr>
-      <th>{{ weekNoTitle }}</th>
+      <th>{{ weekNoText }}</th>
       <th v-for="day in weekDays">
         <div class="calendar-weekdays">{{ day }}</div>
       </th>
     </tr>
     <tr v-for="week in calendar" :class="getTrClass(week[0])"
       @click="select(week[0])">
-      <td>{{ getWeek(week[0]) }}</td>
+      <td>
+        <div class="calendar-weekno">
+          {{ isNow(week[0]) ? currentText : getWeek(week[0]) }}
+        </div>
+      </td>
       <td v-for="day in week">
         <div class="calendar-item" :class="getTdClass(day)">
           {{ day.getDate() }}
@@ -27,12 +31,15 @@
 import { getWeekStart, getWeek } from '../utils'
 import calendar from './calendar'
 
+var NOW = getWeekStart(new Date()).toDateString()
+
 export default {
   name: 'week-calendar',
 
   mixins: [calendar],
 
-  weekNoTitle: '周',
+  weekNoText: '周次',
+  currentText: '本周',
 
   props: {
     value: {
@@ -52,6 +59,7 @@ export default {
 
     getTrClass (week) {
       return {
+        current: this.isNow(week),
         restrict: this.restrict(new Date(week)),
         selected: this.value &&
           week.valueOf() === getWeekStart(this.value).valueOf()
@@ -60,11 +68,15 @@ export default {
 
     getTdClass (day) {
       return { outter: day.getMonth() !== this.month }
+    },
+
+    isNow (week) {
+      return week.toDateString() === NOW
     }
   },
 
   created () {
-    this.weekNoTitle = this.$options.weekNoTitle
+    this.weekNoText = this.$options.weekNoText
     this.getWeek = getWeek
   }
 }

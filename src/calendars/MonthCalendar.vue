@@ -6,7 +6,7 @@
     <tr v-for="(_, r) in 3">
       <td v-for="(cc, c) in 4" @click="select(r * 4 + c)">
         <div class="calendar-item" :class="getClass(r * 4 + c)">
-          {{ r * 4 + cc }} 月
+          {{ isNow(r * 4 + c) ? currentText : r * 4 + cc + '月' }}
         </div>
       </td>
     </tr>
@@ -18,8 +18,15 @@ var current = new Date()
 current.setMonth(0, 1)
 current.setHours(0, 0, 0, 0)
 
+var NOW = {
+  y: new Date().getFullYear(),
+  m: new Date().getMonth()
+}
+
 export default {
   name: 'month-calendar',
+
+  currentText: '本月',
 
   props: {
     value: {
@@ -60,15 +67,21 @@ export default {
 
     getClass (month) {
       return {
+        current: this.isNow(month),
         restrict: this.restrict(new Date(this.year, month)),
         selected: this.value &&
           this.value.getFullYear() === this.year &&
           this.value.getMonth() === month
       }
+    },
+
+    isNow (month) {
+      return this.year === NOW.y && month === NOW.m
     }
   },
 
   created () {
+    this.currentText = this.$options.currentText
     this.switchToCurrent(this.value)
     this.$on('go', function (num) {
       var current = new Date(this.current)

@@ -13,7 +13,7 @@
     <tr v-for="week in calendar">
       <td v-for="day in week" @click="select(day)">
         <div class="calendar-item" :class="getClass(day)">
-          {{ day.getDate() }}
+          {{ isNow(day) ? currentText : day.getDate() }}
         </div>
       </td>
     </tr>
@@ -23,10 +23,14 @@
 <script>
 import calendar from './calendar'
 
+var NOW = new Date().toDateString()
+
 export default {
   name: 'date-calendar',
 
   mixins: [calendar],
+
+  currentText: '今天',
 
   props: {
     value: {
@@ -47,10 +51,15 @@ export default {
     getClass (day) {
       return {
         outter: day.getMonth() !== this.month,
+        current: this.isNow(day),
         restrict: this.restrict(new Date(day)),
         selected: this.value &&
           day.toDateString() === this.value.toDateString()
       }
+    },
+
+    isNow (day) {
+      return day.toDateString() === NOW
     }
   }
 }

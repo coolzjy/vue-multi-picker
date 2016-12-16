@@ -55,6 +55,7 @@ export default {
 
   created () {
     this.weekDays = this.$options.weekDays
+    this.currentText = this.$options.currentText
     this.switchToCurrent(this.value)
     this.$on('go', function (num) {
       var current = new Date(this.current)
