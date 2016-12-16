@@ -110,6 +110,7 @@ var calendar = {
 
   created: function created () {
     this.weekDays = this.$options.weekDays;
+    this.currentText = this.$options.currentText;
     this.switchToCurrent(this.value);
     this.$on('go', function (num) {
       var current = new Date(this.current);
@@ -119,10 +120,14 @@ var calendar = {
   }
 };
 
-var DateCalendar = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._c;return _h('table',{staticClass:"vmp-calendar-day"},[_h('tr',[_h('th',{attrs:{"colspan":"7"}},[_h('div',{staticClass:"calendar-title"},[_vm._s(_vm.year)+" 年 "+_vm._s(_vm.month + 1)+" 月"])])]),_h('tr',[_vm._l((_vm.weekDays),function(day){return _h('th',[_h('div',{staticClass:"calendar-weekdays"},[_vm._s(day)])])})]),_vm._l((_vm.calendar),function(week){return _h('tr',[_vm._l((week),function(day){return _h('td',{on:{"click":function($event){_vm.select(day);}}},[_h('div',{staticClass:"calendar-item",class:_vm.getClass(day)},[_vm._s(day.getDate())])])})])})])},staticRenderFns: [],
+var NOW = new Date().toDateString();
+
+var DateCalendar = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._c;return _h('table',{staticClass:"vmp-calendar-day"},[_h('tr',[_h('th',{attrs:{"colspan":"7"}},[_h('div',{staticClass:"calendar-title"},[_vm._s(_vm.year)+" 年 "+_vm._s(_vm.month + 1)+" 月"])])]),_h('tr',[_vm._l((_vm.weekDays),function(day){return _h('th',[_h('div',{staticClass:"calendar-weekdays"},[_vm._s(day)])])})]),_vm._l((_vm.calendar),function(week){return _h('tr',[_vm._l((week),function(day){return _h('td',{on:{"click":function($event){_vm.select(day);}}},[_h('div',{staticClass:"calendar-item",class:_vm.getClass(day)},[_vm._s(_vm.isNow(day) ? _vm.currentText : day.getDate())])])})])})])},staticRenderFns: [],
   name: 'date-calendar',
 
   mixins: [calendar],
+
+  currentText: '今天',
 
   props: {
     value: {
@@ -143,20 +148,28 @@ var DateCalendar = {render: function(){var _vm=this;var _h=_vm.$createElement;va
     getClass: function getClass (day) {
       return {
         outter: day.getMonth() !== this.month,
+        current: this.isNow(day),
         restrict: this.restrict(new Date(day)),
         selected: this.value &&
           day.toDateString() === this.value.toDateString()
       }
+    },
+
+    isNow: function isNow (day) {
+      return day.toDateString() === NOW
     }
   }
 };
 
-var WeekCalendar = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._c;return _h('table',{staticClass:"vmp-calendar-week"},[_h('tr',[_h('th',{attrs:{"colspan":"8"}},[_h('div',{staticClass:"calendar-title"},[_vm._s(_vm.year)+" 年 "+_vm._s(_vm.month + 1)+" 月"])])]),_h('tr',[_h('th',[_vm._s(_vm.weekNoTitle)]),_vm._l((_vm.weekDays),function(day){return _h('th',[_h('div',{staticClass:"calendar-weekdays"},[_vm._s(day)])])})]),_vm._l((_vm.calendar),function(week){return _h('tr',{class:_vm.getTrClass(week[0]),on:{"click":function($event){_vm.select(week[0]);}}},[_h('td',[_vm._s(_vm.getWeek(week[0]))]),_vm._l((week),function(day){return _h('td',[_h('div',{staticClass:"calendar-item",class:_vm.getTdClass(day)},[_vm._s(day.getDate())])])})])})])},staticRenderFns: [],
+var NOW$1 = getWeekStart(new Date()).toDateString();
+
+var WeekCalendar = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._c;return _h('table',{staticClass:"vmp-calendar-week"},[_h('tr',[_h('th',{attrs:{"colspan":"8"}},[_h('div',{staticClass:"calendar-title"},[_vm._s(_vm.year)+" 年 "+_vm._s(_vm.month + 1)+" 月"])])]),_h('tr',[_h('th',[_vm._s(_vm.weekNoText)]),_vm._l((_vm.weekDays),function(day){return _h('th',[_h('div',{staticClass:"calendar-weekdays"},[_vm._s(day)])])})]),_vm._l((_vm.calendar),function(week){return _h('tr',{class:_vm.getTrClass(week[0]),on:{"click":function($event){_vm.select(week[0]);}}},[_h('td',[_h('div',{staticClass:"calendar-weekno"},[_vm._s(_vm.isNow(week[0]) ? _vm.currentText : _vm.getWeek(week[0]))])]),_vm._l((week),function(day){return _h('td',[_h('div',{staticClass:"calendar-item",class:_vm.getTdClass(day)},[_vm._s(day.getDate())])])})])})])},staticRenderFns: [],
   name: 'week-calendar',
 
   mixins: [calendar],
 
-  weekNoTitle: '周',
+  weekNoText: '周次',
+  currentText: '本周',
 
   props: {
     value: {
@@ -176,6 +189,7 @@ var WeekCalendar = {render: function(){var _vm=this;var _h=_vm.$createElement;va
 
     getTrClass: function getTrClass (week) {
       return {
+        current: this.isNow(week),
         restrict: this.restrict(new Date(week)),
         selected: this.value &&
           week.valueOf() === getWeekStart(this.value).valueOf()
@@ -184,11 +198,15 @@ var WeekCalendar = {render: function(){var _vm=this;var _h=_vm.$createElement;va
 
     getTdClass: function getTdClass (day) {
       return { outter: day.getMonth() !== this.month }
+    },
+
+    isNow: function isNow (week) {
+      return week.toDateString() === NOW$1
     }
   },
 
   created: function created () {
-    this.weekNoTitle = this.$options.weekNoTitle;
+    this.weekNoText = this.$options.weekNoText;
     this.getWeek = getWeek;
   }
 };
@@ -197,8 +215,15 @@ var current$1 = new Date();
 current$1.setMonth(0, 1);
 current$1.setHours(0, 0, 0, 0);
 
-var MonthCalendar = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._c;return _h('table',{staticClass:"vmp-calendar-month"},[_h('tr',[_h('th',{attrs:{"colspan":"4"}},[_h('div',{staticClass:"calendar-title"},[_vm._s(_vm.year)+" 年"])])]),_vm._l((3),function(_,r){return _h('tr',[_vm._l((4),function(cc,c){return _h('td',{on:{"click":function($event){_vm.select(r * 4 + c);}}},[_h('div',{staticClass:"calendar-item",class:_vm.getClass(r * 4 + c)},[_vm._s(r * 4 + cc)+" 月"])])})])})])},staticRenderFns: [],
+var NOW$2 = {
+  y: new Date().getFullYear(),
+  m: new Date().getMonth()
+};
+
+var MonthCalendar = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._c;return _h('table',{staticClass:"vmp-calendar-month"},[_h('tr',[_h('th',{attrs:{"colspan":"4"}},[_h('div',{staticClass:"calendar-title"},[_vm._s(_vm.year)+" 年"])])]),_vm._l((3),function(_,r){return _h('tr',[_vm._l((4),function(cc,c){return _h('td',{on:{"click":function($event){_vm.select(r * 4 + c);}}},[_h('div',{staticClass:"calendar-item",class:_vm.getClass(r * 4 + c)},[_vm._s(_vm.isNow(r * 4 + c) ? _vm.currentText : r * 4 + cc + '月')])])})])})])},staticRenderFns: [],
   name: 'month-calendar',
+
+  currentText: '本月',
 
   props: {
     value: {
@@ -239,15 +264,21 @@ var MonthCalendar = {render: function(){var _vm=this;var _h=_vm.$createElement;v
 
     getClass: function getClass (month) {
       return {
+        current: this.isNow(month),
         restrict: this.restrict(new Date(this.year, month)),
         selected: this.value &&
           this.value.getFullYear() === this.year &&
           this.value.getMonth() === month
       }
+    },
+
+    isNow: function isNow (month) {
+      return this.year === NOW$2.y && month === NOW$2.m
     }
   },
 
   created: function created () {
+    this.currentText = this.$options.currentText;
     this.switchToCurrent(this.value);
     this.$on('go', function (num) {
       var current = new Date(this.current);
