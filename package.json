@@ -2,7 +2,7 @@
   "name": "vue-multi-picker",
   "version": "1.0.2",
   "description": "A multi function date picker",
-  "keywords": "datepicker weekpicker monthpicker",
+  "keywords": "datepicker,weekpicker,monthpicker",
   "author": "Zhang Visper <reg@zjy.name>",
   "main": "dist/index.common.js",
   "repository": {

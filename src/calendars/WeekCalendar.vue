@@ -1,27 +1,24 @@
 <template>
   <table class="vmp-calendar-week">
     <tr>
-      <th colspan="8">
-        <div class="calendar-title">{{ year }} 年 {{ month + 1 }} 月</div>
+      <th colspan="8" class="calendar-title">
+        <div>{{ year }} 年 {{ month + 1 }} 月</div>
       </th>
     </tr>
     <tr>
-      <th>{{ weekNoText }}</th>
-      <th v-for="day in weekDays">
-        <div class="calendar-weekdays">{{ day }}</div>
+      <th class="calendar-weektitle">{{ weekNoText }}</th>
+      <th v-for="day in weekDays" class="calendar-weekdays">
+        <div>{{ day }}</div>
       </th>
     </tr>
-    <tr v-for="week in calendar" :class="getTrClass(week[0])"
+    <tr v-for="week in calendar"
+      :class="getTrClass(week[0])"
       @click="select(week[0])">
-      <td>
-        <div class="calendar-weekno">
-          {{ isNow(week[0]) ? currentText : getWeek(week[0]) }}
-        </div>
+      <td class="calendar-weekno">
+        <div>{{ isNow(week[0]) ? currentText : getWeek(week[0]) }}</div>
       </td>
-      <td v-for="day in week">
-        <div class="calendar-item" :class="getTdClass(day)">
-          {{ day.getDate() }}
-        </div>
+      <td v-for="day in week" class="calendar-item" :class="getTdClass(day)">
+        <div>{{ day.getDate() }}</div>
       </td>
     </tr>
   </table>

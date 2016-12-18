@@ -2,6 +2,8 @@
 
 > A multi function date picker
 
+> NOTE: version 1.\* is for vue 2.x and version 0.\* is for vue 1.x
+
 ## Usage
 ```javascript
 import { DateCalendar, WeekCalendar, MonthCalendar } from 'vue-multi-picker'

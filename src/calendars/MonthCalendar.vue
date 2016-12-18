@@ -1,13 +1,12 @@
 <template>
   <table class="vmp-calendar-month">
     <tr>
-      <th colspan="4"><div class="calendar-title">{{ year }} 年</div></th>
+      <th colspan="4" class="calendar-title"><div>{{ year }} 年</div></th>
     </tr>
     <tr v-for="(_, r) in 3">
-      <td v-for="(cc, c) in 4" @click="select(r * 4 + c)">
-        <div class="calendar-item" :class="getClass(r * 4 + c)">
-          {{ isNow(r * 4 + c) ? currentText : r * 4 + cc + '月' }}
-        </div>
+      <td v-for="(cc, c) in 4" class="calendar-item"
+        :class="getClass(r * 4 + c)" @click="select(r * 4 + c)">
+        <div>{{ isNow(r * 4 + c) ? currentText : r * 4 + cc + '月' }}</div>
       </td>
     </tr>
   </table>
