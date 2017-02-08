@@ -28,7 +28,7 @@
 import { getWeekStart, getWeek } from '../utils'
 import calendar from './calendar'
 
-var NOW = getWeekStart(new Date()).toDateString()
+var NOW
 
 export default {
   name: 'week-calendar',
@@ -73,6 +73,7 @@ export default {
   },
 
   created () {
+    NOW = getWeekStart(new Date()).toDateString()
     this.weekNoText = this.$options.weekNoText
     this.getWeek = getWeek
   }

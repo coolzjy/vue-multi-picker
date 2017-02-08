@@ -17,10 +17,7 @@ var current = new Date()
 current.setMonth(0, 1)
 current.setHours(0, 0, 0, 0)
 
-var NOW = {
-  y: new Date().getFullYear(),
-  m: new Date().getMonth()
-}
+var NOW
 
 export default {
   name: 'month-calendar',
@@ -80,6 +77,10 @@ export default {
   },
 
   created () {
+    NOW = {
+      y: new Date().getFullYear(),
+      m: new Date().getMonth()
+    }
     this.currentText = this.$options.currentText
     this.switchToCurrent(this.value)
     this.$on('go', function (num) {

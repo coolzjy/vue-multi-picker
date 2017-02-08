@@ -22,7 +22,7 @@
 <script>
 import calendar from './calendar'
 
-var NOW = new Date().toDateString()
+var NOW
 
 export default {
   name: 'date-calendar',
@@ -60,6 +60,10 @@ export default {
     isNow (day) {
       return day.toDateString() === NOW
     }
+  },
+
+  created () {
+    NOW = new Date().toDateString()
   }
 }
 </script>
