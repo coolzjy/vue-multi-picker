@@ -11,6 +11,7 @@ var ONE_WEEK = ONE_DAY * 7;
  *  @return {ojbect} start date of the week
  */
 function getWeekStart (date) {
+  if (!date instanceof Date) { return date }
   var day = date.getDay();
   var offset = (date.getDay() + 6) % 7;
   var weekStart = new Date(date.valueOf() - offset * ONE_DAY);
@@ -21,9 +22,10 @@ function getWeekStart (date) {
 /**
  *  get date of week end (Sunday)
  *  @param {object} date - date in a week
- *  @return {ojbect} start date of the week
+ *  @return {ojbect} end date of the week
  */
 function getWeekEnd (date) {
+  if (!date instanceof Date) { return date }
   var offset = 6 - (date.getDay() + 6) % 7;
   var weekEnd = new Date(date.valueOf() + offset * ONE_DAY);
   weekEnd.setHours(0, 0, 0, 0);
