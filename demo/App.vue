@@ -18,12 +18,13 @@
 </template>
 
 <script>
-import { DateCalendar, WeekCalendar, MonthCalendar } from '../src'
+import { DateCalendar, WeekCalendar, MonthCalendar, YearCalendar } from '../src'
 
 var TYPES = [
   { t: '日', v: 'date-calendar' },
   { t: '周', v: 'week-calendar' },
   { t: '月', v: 'month-calendar' },
+  { t: '年', v: 'year-calendar' }
 ]
 
 export default {
@@ -47,7 +48,7 @@ export default {
     }
   },
 
-  components: { DateCalendar, WeekCalendar, MonthCalendar }
+  components: { DateCalendar, WeekCalendar, MonthCalendar, YearCalendar }
 }
 </script>
 
