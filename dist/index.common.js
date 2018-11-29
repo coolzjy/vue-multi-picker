@@ -124,7 +124,7 @@ var calendar = {
 
 var NOW;
 
-var DateCalendar = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._c;return _h('table',{staticClass:"vmp-calendar-date"},[_h('tr',[_h('th',{staticClass:"calendar-title",attrs:{"colspan":"7"}},[_h('div',[_vm._s(_vm.year)+" 年 "+_vm._s(_vm.month + 1)+" 月"])])]),_h('tr',[_vm._l((_vm.weekDays),function(day){return _h('th',{staticClass:"calendar-weekdays"},[_h('div',[_vm._s(day)])])})]),_vm._l((_vm.calendar),function(week){return _h('tr',[_vm._l((week),function(day){return _h('td',{staticClass:"calendar-item",class:_vm.getClass(day),on:{"click":function($event){_vm.select(day);}}},[_h('div',[_vm._s(_vm.isNow(day) ? _vm.currentText : day.getDate())])])})])})])},staticRenderFns: [],
+var DateCalendar = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _h('table',{staticClass:"vmp-calendar-date"},[_h('tr',[_h('th',{staticClass:"calendar-title",attrs:{"colspan":"7"}},[_h('div',[_vm._s(_vm.year)+" 年 "+_vm._s(_vm.month + 1)+" 月"])])])," ",_h('tr',[_vm._l((_vm.weekDays),function(day){return _h('th',{staticClass:"calendar-weekdays"},[_h('div',[_vm._s(day)])])})])," ",_vm._l((_vm.calendar),function(week){return _h('tr',[_vm._l((week),function(day){return _h('td',{staticClass:"calendar-item",class:_vm.getClass(day),on:{"click":function($event){_vm.select(day);}}},[_h('div',[_vm._s(_vm.isNow(day) ? _vm.currentText : day.getDate())])])})])})])},staticRenderFns: [],
   name: 'date-calendar',
 
   mixins: [calendar],
@@ -169,7 +169,7 @@ var DateCalendar = {render: function(){var _vm=this;var _h=_vm.$createElement;va
 
 var NOW$1;
 
-var WeekCalendar = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._c;return _h('table',{staticClass:"vmp-calendar-week"},[_h('tr',[_h('th',{staticClass:"calendar-title",attrs:{"colspan":"8"}},[_h('div',[_vm._s(_vm.year)+" 年 "+_vm._s(_vm.month + 1)+" 月"])])]),_h('tr',[_h('th',{staticClass:"calendar-weektitle"},[_vm._s(_vm.weekNoText)]),_vm._l((_vm.weekDays),function(day){return _h('th',{staticClass:"calendar-weekdays"},[_h('div',[_vm._s(day)])])})]),_vm._l((_vm.calendar),function(week){return _h('tr',{class:_vm.getTrClass(week[0]),on:{"click":function($event){_vm.select(week[0]);}}},[_h('td',{staticClass:"calendar-weekno"},[_h('div',[_vm._s(_vm.isNow(week[0]) ? _vm.currentText : _vm.getWeek(week[0]))])]),_vm._l((week),function(day){return _h('td',{staticClass:"calendar-item",class:_vm.getTdClass(day)},[_h('div',[_vm._s(day.getDate())])])})])})])},staticRenderFns: [],
+var WeekCalendar = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _h('table',{staticClass:"vmp-calendar-week"},[_h('tr',[_h('th',{staticClass:"calendar-title",attrs:{"colspan":"8"}},[_h('div',[_vm._s(_vm.year)+" 年 "+_vm._s(_vm.month + 1)+" 月"])])])," ",_h('tr',[_h('th',{staticClass:"calendar-weektitle"},[_vm._s(_vm.weekNoText)])," ",_vm._l((_vm.weekDays),function(day){return _h('th',{staticClass:"calendar-weekdays"},[_h('div',[_vm._s(day)])])})])," ",_vm._l((_vm.calendar),function(week){return _h('tr',{class:_vm.getTrClass(week[0]),on:{"click":function($event){_vm.select(week[0]);}}},[_h('td',{staticClass:"calendar-weekno"},[_h('div',[_vm._s(_vm.isNow(week[0]) ? _vm.currentText : _vm.getWeek(week[0]))])])," ",_vm._l((week),function(day){return _h('td',{staticClass:"calendar-item",class:_vm.getTdClass(day)},[_h('div',[_vm._s(day.getDate())])])})])})])},staticRenderFns: [],
   name: 'week-calendar',
 
   mixins: [calendar],
@@ -224,7 +224,7 @@ current$1.setHours(0, 0, 0, 0);
 
 var NOW$2;
 
-var MonthCalendar = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._c;return _h('table',{staticClass:"vmp-calendar-month"},[_h('tr',[_h('th',{staticClass:"calendar-title",attrs:{"colspan":"4"}},[_h('div',[_vm._s(_vm.year)+" 年"])])]),_vm._l((3),function(_,r){return _h('tr',[_vm._l((4),function(cc,c){return _h('td',{staticClass:"calendar-item",class:_vm.getClass(r * 4 + c),on:{"click":function($event){_vm.select(r * 4 + c);}}},[_h('div',[_vm._s(_vm.isNow(r * 4 + c) ? _vm.currentText : r * 4 + cc + '月')])])})])})])},staticRenderFns: [],
+var MonthCalendar = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _h('table',{staticClass:"vmp-calendar-month"},[_h('tr',[_h('th',{staticClass:"calendar-title",attrs:{"colspan":"4"}},[_h('div',[_vm._s(_vm.year)+" 年"])])])," ",_vm._l((3),function(_,r){return _h('tr',[_vm._l((4),function(cc,c){return _h('td',{staticClass:"calendar-item",class:_vm.getClass(r * 4 + c),on:{"click":function($event){_vm.select(r * 4 + c);}}},[_h('div',[_vm._s(_vm.isNow(r * 4 + c) ? _vm.currentText : r * 4 + cc + '月')])])})])})])},staticRenderFns: [],
   name: 'month-calendar',
 
   currentText: '本月',
@@ -296,7 +296,95 @@ var MonthCalendar = {render: function(){var _vm=this;var _h=_vm.$createElement;v
   }
 };
 
+var current$2 = new Date();
+current$2.setMonth(0, 1);
+current$2.setHours(0, 0, 0, 0);
+
+var NOW$3;
+
+var YearCalendar = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _h('table',{staticClass:"vmp-calendar-month"},[_h('tr',[_h('th',{staticClass:"calendar-title",attrs:{"colspan":"4"}},[_h('div',[_vm._s(_vm.years[1])+" - "+_vm._s(_vm.years[10])+" 年"])])])," ",_vm._l((3),function(_,r){return _h('tr',[_vm._l((4),function(__,c){return _h('td',{staticClass:"calendar-item",class:_vm.getClass(_vm.years[r * 4 + c]),on:{"click":function($event){_vm.select(_vm.years[r * 4 + c]);}}},[_h('div',[_vm._s(_vm.isNow(_vm.years[r * 4 + c]) ? _vm.currentText : _vm.years[r * 4 + c])])])})])})])},staticRenderFns: [],
+  name: 'year-calendar',
+
+  currentText: '本年',
+
+  props: {
+    value: {
+      type: Date
+    },
+    restrict: {
+      type: Function,
+      default: function default$1 () { return false }
+    }
+  },
+
+  data: function data () {
+    return {
+      current: Object.freeze(current$2)
+    }
+  },
+
+  computed: {
+    year: function year () { return this.current.getFullYear() },
+    years: function years () {
+      var year = this.year.toString();
+      var segYears = [];
+      year -= year[3];
+      for (var i = year - 1; i < year + 11; i++) {
+        segYears.push(i);
+      }
+      return segYears
+    }
+  },
+
+  watch: {
+    'value': 'switchToCurrent'
+  },
+
+  methods: {
+    switchToCurrent: function switchToCurrent (selected, prevSelected) {
+      if (!selected) { return }
+      if (!prevSelected || selected.getFullYear() !== this.year) {
+        this.current = Object.freeze(new Date(selected.getFullYear(), 0));
+      }
+    },
+
+    select: function select (year) {
+      if (this.restrict(new Date(year.toString()))) { return }
+      this.$emit('input', new Date(year.toString()));
+    },
+
+    getClass: function getClass (year) {
+      return {
+        outter: year === this.years[0] || year === this.years[11],
+        current: this.isNow(year),
+        restrict: this.restrict(new Date(year)),
+        selected: this.value &&
+          this.value.getFullYear() === year
+      }
+    },
+
+    isNow: function isNow (year) {
+      return NOW$3.y === year
+    }
+  },
+
+  created: function created () {
+    NOW$3 = {
+      y: new Date().getFullYear(),
+      m: new Date().getMonth()
+    };
+    this.currentText = this.$options.currentText;
+    this.switchToCurrent(this.value);
+    this.$on('go', function (num) {
+      var current = new Date(this.current);
+      current.setFullYear(this.year + num * 10);
+      this.current = Object.freeze(current);
+    });
+  }
+};
+
 exports.utils = utils;
 exports.DateCalendar = DateCalendar;
 exports.WeekCalendar = WeekCalendar;
 exports.MonthCalendar = MonthCalendar;
+exports.YearCalendar = YearCalendar;
